@@ -22,13 +22,13 @@ class Student
         )
       SQL
       DB[:conn].execute(sql)
-    end
+  end
 
-    def self.drop_table
+  def self.drop_table
       DB[:conn].execute("DROP TABLE students")
-    end
+  end
 
-    def save
+  def save
       if self.id
         DB[:conn].execute("UPDATE students SET name=?, grade=? WHERE id=?", self.name, self.grade, self.id)
       else
@@ -37,27 +37,28 @@ class Student
       end
     end
 
-    def self.create(name, grade)
+   def self.create(name, grade)
       student = self.new(name, grade)
       student.save
       student
     end
 
-    def self.new_from_db(row)
+   def self.new_from_db(row)
       id = row[0]
       name = row[1]
       grade = row[2]
       student = self.new(name, grade, id)
     end
 
-    def self.find_by_name(name)
+   def self.find_by_name(name)
       rows = DB[:conn].execute("SELECT * FROM students WHERE name=? LIMIT 1", name)
       rows.map do |row|
         self.new_from_db(row)
       end.first
     end
 
-    def update
+   def update
       DB[:conn].execute("UPDATE students SET name=?, grade=? WHERE id=?", self.name, self.grade, self.id)
+    
     end
 end
